@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+KEY="$HOME/.ssh/id_ed25519"
+
+if [ ! -f "$KEY" ]; then
+  mkdir -p ~/.ssh
+  chmod 700 ~/.ssh
+  ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)" -f "$KEY" -N ""
+
+  echo
+  echo "============================================================"
+  echo "  New SSH key generated. Add the public key to GitHub:"
+  echo "  https://github.com/settings/ssh/new"
+  echo
+  cat "${KEY}.pub"
+  echo "============================================================"
+fi
