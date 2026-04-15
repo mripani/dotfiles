@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v kind &>/dev/null; then
+  omarchy-pkg-aur-add kind
+fi

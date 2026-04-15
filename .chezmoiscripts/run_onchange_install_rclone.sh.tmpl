@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v rclone &>/dev/null; then
+  omarchy-pkg-add rclone
+fi

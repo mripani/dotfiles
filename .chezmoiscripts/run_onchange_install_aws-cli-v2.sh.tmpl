@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v aws &>/dev/null; then
+  omarchy-pkg-add aws-cli-v2
+fi

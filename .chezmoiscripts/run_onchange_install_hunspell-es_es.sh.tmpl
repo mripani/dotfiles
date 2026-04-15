@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+if ! pacman -Qi hunspell-es_es &>/dev/null; then
+  omarchy-pkg-add hunspell-es_es
+fi

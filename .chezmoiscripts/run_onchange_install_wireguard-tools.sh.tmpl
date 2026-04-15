@@ -1,0 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v wg &>/dev/null; then
+  omarchy-pkg-add wireguard-tools
+fi
