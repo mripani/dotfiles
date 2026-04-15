@@ -1,0 +1,12 @@
+[Unit]
+Description=rclone Google Drive mount
+After=network-online.target
+
+[Service]
+Type=notify
+ExecStart=rclone mount gdrive: {{ .chezmoi.homeDir }}/gdrive --vfs-cache-mode writes --vfs-cache-max-size 5G
+ExecStop=fusermount -u {{ .chezmoi.homeDir }}/gdrive
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+# Re-run this script when the unit file changes:
+# unit-hash: {{ include "dot_config/systemd/user/rclone-gdrive.service.tmpl" | sha256sum }}
+
+MOUNT_POINT="$HOME/gdrive"
+SERVICE="rclone-gdrive.service"
+
+# Create mount point if it doesn't exist (and isn't already a mount)
+if ! mountpoint -q "$MOUNT_POINT" && [ ! -d "$MOUNT_POINT" ]; then
+  mkdir -p "$MOUNT_POINT"
+fi
+
+# Reload user daemon to pick up unit file changes
+systemctl --user daemon-reload
+
+# Ensure enabled (idempotent)
+systemctl --user enable "$SERVICE"
+
+# Restart picks up unit changes; also starts if not already running
+systemctl --user restart "$SERVICE"
