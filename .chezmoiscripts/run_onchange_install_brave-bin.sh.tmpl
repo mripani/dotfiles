@@ -4,3 +4,5 @@ set -euo pipefail
 if ! command -v brave &>/dev/null; then
   omarchy-pkg-aur-add brave-bin
 fi
+
+xdg-settings set default-web-browser brave-browser.desktop
