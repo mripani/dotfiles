@@ -2,5 +2,7 @@
 set -euo pipefail
 
 if [ ! -f "$HOME/.local/share/applications/Slack.desktop" ]; then
-  omarchy-webapp-install "Slack" "https://app.slack.com" ""
+  omarchy-webapp-install "Slack" "https://app.slack.com/client" "" "" "x-scheme-handler/slack;"
 fi
+
+xdg-mime default Slack.desktop x-scheme-handler/slack
