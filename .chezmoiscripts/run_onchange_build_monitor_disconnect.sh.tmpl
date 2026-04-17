@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+
+# Re-run when source changes:
+# main-hash: {{ include "dot_config/hypr/scripts/monitor_disconnect/src/main.rs" | sha256sum }}
+# cargo-hash: {{ include "dot_config/hypr/scripts/monitor_disconnect/Cargo.toml" | sha256sum }}
+
+{{ if ne .chezmoi.hostname "thinkpad" -}}
+exit 0
+{{ end -}}
+
+cd ~/.config/hypr/scripts/monitor_disconnect
+cargo build --release
+
+pkill -f 'monitor-disconnect$' 2>/dev/null || true
+~/.config/hypr/scripts/monitor_disconnect/target/release/monitor-disconnect &
+disown
