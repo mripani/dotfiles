@@ -1,0 +1,27 @@
+#!/bin/bash
+set -euo pipefail
+
+omarchy-pkg-add thunderbird
+
+xdg-mime default org.mozilla.Thunderbird.desktop x-scheme-handler/mailto
+xdg-mime default org.mozilla.Thunderbird.desktop message/rfc822
+xdg-mime default org.mozilla.Thunderbird.desktop x-scheme-handler/mid
+
+rm -f {{ .chezmoi.homeDir | quote }}/.local/share/applications/HEY.desktop
+rm -f {{ .chezmoi.homeDir | quote }}/.local/share/applications/icons/HEY.png
+update-desktop-database {{ .chezmoi.homeDir | quote }}/.local/share/applications 2>/dev/null || true
+
+BINDINGS={{ .chezmoi.homeDir | quote }}/.config/hypr/bindings.conf
+if [ -f "$BINDINGS" ]; then
+  sed -i 's|^bindd = SUPER SHIFT, E, Email, exec, .*|bindd = SUPER SHIFT, E, Email, exec, uwsm-app -- thunderbird|' "$BINDINGS"
+fi
+
+BRAVE_PREFS={{ .chezmoi.homeDir | quote }}/.config/BraveSoftware/Brave-Browser/Default/Preferences
+if [ -f "$BRAVE_PREFS" ]; then
+  if pgrep -x brave >/dev/null; then
+    echo "Brave is running — close it and re-run 'chezmoi apply' to strip Hey's mailto handler." >&2
+  else
+    tmp=$(mktemp)
+    jq '(.custom_handlers.registered_protocol_handlers // []) |= map(select(.protocol != "mailto"))' "$BRAVE_PREFS" >"$tmp" && mv "$tmp" "$BRAVE_PREFS"
+  fi
+fi
