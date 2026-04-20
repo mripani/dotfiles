@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ ! -f "$HOME/.local/share/applications/Telegram.desktop" ]; then
+  omarchy-webapp-install "Telegram" "https://web.telegram.org/a/" "" "" "x-scheme-handler/tg;"
+fi
+
+xdg-mime default Telegram.desktop x-scheme-handler/tg
