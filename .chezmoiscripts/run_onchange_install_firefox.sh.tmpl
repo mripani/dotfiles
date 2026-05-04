@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v firefox &>/dev/null; then
+  omarchy-pkg-add firefox
+fi
+
+xdg-settings set default-web-browser firefox.desktop
